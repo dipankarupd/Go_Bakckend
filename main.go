@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/dipankarupd/go-football-betting/pkg/route"
 	"github.com/gorilla/mux"
@@ -16,6 +17,8 @@ func main() {
 	route.RegisterGameRoutes(r)
 	http.Handle("/", r)
 
-	fmt.Println("Starting the server at port 8080:")
-	log.Fatal(http.ListenAndServe("localhost:8080", r))
+	port := os.Getenv("PORT")
+
+	fmt.Println("Starting the server:")
+	log.Fatal(http.ListenAndServe("0.0.0.0"+port, r))
 }

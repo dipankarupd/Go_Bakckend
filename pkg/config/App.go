@@ -3,32 +3,32 @@ package config
 // this deals with connection with the sql database
 
 import (
+	"os"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
-
-// create a variable db
-// the main intention of this file is to return a var db which other files will
-// interact with
 
 var (
 	db *gorm.DB
 )
 
-// create a connect method which will help us to connect with the mysql db:
-
 func Connect() {
-	// open a database
-	// gorm.Open("db_used", "username:pw@/dbname?")
-	d, err := gorm.Open("mysql", "dipankar:dru563@/bettingraja?charset=utf8&parseTime=True&loc=Local")
 
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbName := os.Getenv("DB_NAME")
+
+	// Create the connection string
+	connectionString := dbUser + ":" + dbPassword + "@(" + dbHost + ")/" + dbName + "?charset=utf8&parseTime=True&loc=Local"
+
+	// Open a database connection
+	d, err := gorm.Open("mysql", connectionString)
 	if err != nil {
 		panic(err)
 	}
-	db = d
-}
 
-// this func returns a db
-func GetDB() *gorm.DB {
-	return db
+	// Assign the connection to the global variable
+	db = d
 }
